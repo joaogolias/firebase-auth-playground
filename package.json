@@ -1,0 +1,31 @@
+{
+  "name": "firebase-auth-playground",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^3.6.2",
+    "@types/fb": "^0.0.23",
+    "@types/muicss": "^0.9.1",
+    "@types/react-facebook-login": "^4.1.0",
+    "fb": "^2.0.0",
+    "muicss": "^0.9.41",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^4.0.0",
+    "react-scripts-ts": "3.1.0"
+  },
+  "scripts": {
+    "start": "export HTTPS=true && react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10.12.12",
+    "@types/react": "^16.7.13",
+    "@types/react-dom": "^16.0.11",
+    "typescript": "^3.2.2"
+  }
+}
