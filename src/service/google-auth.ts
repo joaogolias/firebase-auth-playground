@@ -5,7 +5,7 @@ export namespace GoogleAuth {
     export const LoginHandler = (res: any): ILoginInfo  => {
         let logInInfo: ILoginInfo = {
             provider: 'google'
-        }
+				}
         if (res.error) {
             logInInfo = {
                 ...logInInfo,
@@ -15,7 +15,10 @@ export namespace GoogleAuth {
         } else {
           logInInfo = {
             ...logInInfo,
-            data: res.authResponse,
+            data: {
+							accessToken: res.accessToken,
+							tokenId: res.tokenId
+						},
             isLogged: true,
           }
         }

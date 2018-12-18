@@ -33,11 +33,14 @@ class App extends React.Component<any, IAppState> {
   // }
 
 
-  public responseGoogle = (res: any) => {
+  public responseGoogle = async (res: any) => {
       const logInInfo = GoogleAuth.LoginHandler(res);
       this.setState({
         logInInfo
-      })
+			})
+			
+			console.log(logInInfo.data)
+			await this.loginProvider.authenticate(res.tokenId, 'google')
   }
 
   public responseFacebook = async (res: any) => {
@@ -45,7 +48,7 @@ class App extends React.Component<any, IAppState> {
     this.setState({
       logInInfo
 		})
-		
+
 		await this.loginProvider.authenticate(res.accessToken, 'facebook')
   }
 

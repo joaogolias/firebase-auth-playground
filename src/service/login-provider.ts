@@ -14,7 +14,9 @@ export class LoginProvider extends BaseApiProvider {
 			provider,			
 			token,
 		})
-		
+
+		console.log('result: ', result)
+
 		return result.data
 	}
 }
