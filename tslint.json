@@ -10,7 +10,8 @@
   "rules": {
     "jsx-no-string-ref": false,
     "no-console": false,
-    "interface-name": false
+    "interface-name": false,
+    "no-namespace": false
   },
   "globals": {
     "FB": true

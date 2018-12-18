@@ -5,13 +5,10 @@ import * as React from 'react'
 import FacebookLogin from 'react-facebook-login'
 import GoogleLogin from 'react-google-login'
 import './App.css'
-
-
-export interface ILoginInfo {
-  isLogged?: boolean
-  provider: string
-  data?: any
-}
+import { ILoginInfo } from './service/auth'
+import { FacebookAuth } from './service/facebook-auth'
+import { GoogleAuth } from './service/google-auth'
+import { LoginProvider } from './service/login-provider';
 
 interface IAppState{
   logInInfo: ILoginInfo
@@ -20,74 +17,38 @@ interface IAppState{
 class App extends React.Component<any, IAppState> {
   public email: string 
   public password: string
-  public logInInfo: ILoginInfo 
+	public logInInfo: ILoginInfo 
+	public loginProvider: LoginProvider
 
   constructor(props: any){
     super(props);
     this.state = {
       logInInfo: this.logInInfo
-    }
+		}
+		this.loginProvider = new LoginProvider()
   }
 
-  public responseFacebook = (res: any) => {
-    const logInInfo = {
-      data: res.authResponse,
-      isLogged: true,
-      provider: 'facebook',
-    }
+  // public componentWillMount() {
+   
+  // }
 
-    this.setState({
-      logInInfo
-    })
-
-    
-    // window.fbAsyncInit = () => {
-    //   FB.init({
-    //     appId      : '374974243246808',
-    //     version: 'v2.6',        
-    //     xfbml      : true,
-    //     });
-    // }
-  }
 
   public responseGoogle = (res: any) => {
-    console.log('res: ', res);
-    if (res.error) {
-      console.log('caiu no erro')
-    } else {
-      const logInInfo = {
-        data: res.authResponse,
-        isLogged: true,
-        provider: 'google',
-      }
-  
+      const logInInfo = GoogleAuth.LoginHandler(res);
       this.setState({
         logInInfo
       })
-    }
-  }
-  public componentWillMount() {
-   
-
-    // FB.getLoginStatus((res: FB.LoginStatusResponse) => {
-    //   if (res.status === "connected") {
-    //     const logInInfo = {
-    //       data: res.authResponse,
-    //       isLogged: true,
-    //       provider: 'facebook',
-    //     }
-
-    //     this.setState({
-    //       logInInfo
-    //     })
-
-    //   } 
-    // })
   }
 
-  public normalLogin() {
-    console.log('Normal login')
+  public responseFacebook = async (res: any) => {
+    const logInInfo = FacebookAuth.LoginHandler(res);
+    this.setState({
+      logInInfo
+		})
+		
+		await this.loginProvider.authenticate(res.accessToken, 'facebook')
   }
+
 
   public handleOnChange = (e: any) => {
     if(e.target.placeholder === "Email") {
@@ -97,31 +58,42 @@ class App extends React.Component<any, IAppState> {
     }
   }
 
-  public login = () => {
-    this.setState({
-      logInInfo: {
-        isLogged: true,
-        provider: 'facebook'
-      }
-    })
+  public normalLogin = async () => {
+		await this.loginProvider.normalLogin(this.email,this.password)
   }
 
   public logout = () => {
     if(this.state.logInInfo.provider.toLowerCase() === "facebook") {
-      FB.logout((res) => {
-        console.log('logout: ', res)
-      })
+      FacebookAuth.Logout()
     }
+
+  }
+
+  public loginResponse() {
+    if(this.state.logInInfo) {
+      if(this.state.logInInfo.isLogged) {
+        return (
+          <p className="login-success"> Usuário já está logado com {this.state.logInInfo.provider}.  
+          <span className="logout" onClick={this.logout}>Clique aqui</span> para deslogar  
+          </p> 
+        )
+      }
+      if(this.state.logInInfo.error){
+        return (
+          <p className="login-error"> 
+          Houve um erro com o login por {this.state.logInInfo.provider}. Por favor, tente novamente.
+          </p> 
+        )
+      }
+    }
+    return
   }
 
   public render() {
     return (
       <div className="main-container">
         <div className="form-container">
-        { this.state.logInInfo && this.state.logInInfo.isLogged &&
-          <p> Usuário já está logado com {this.state.logInInfo.provider}. 
-          <span className="logout" onClick={this.logout}> Clique aqui </span> para deslogar  
-          </p> }
+        {this.loginResponse()}
         <div className="login-form">
                 <TextField
                   className="form-input"
@@ -136,28 +108,21 @@ class App extends React.Component<any, IAppState> {
                   type="password"
                   onChange={this.handleOnChange}
                 /><br/>
-              {/* <button className="btn btn-success" onClick={this.loginCommand}><i className="fa fa-sign-in"/>{' '}Log In</button> */}
-              <button className="login-button" onClick={this.normalLogin}>Login</button>
+              
             </div>
-          {/* <Form className="login-form">
-            <Input className="form-input" placeholder="Nome" />
-            <Input className="form-input" placeholder="Senha" />
-            <Button className="submit-login" variant="raised">Login</Button>
-          </Form> */}
           <div className="button-container">
-          <FacebookLogin
-              appId="374974243246808"
-              autoLoad={true}
-              fields="name,email,picture"
-              onClick={this.login}
-              callback={this.responseFacebook} />,
-            {/* <button className="facebook-login"><img className="company-logo" src={require('./icons/facebook-icon.png')}/> Facebook </button> */}
-            <GoogleLogin
-                clientId="976690849194-r8vga09mbnlp8upssajkqq5pjk6k29qn.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={this.responseGoogle}
-                onFailure={this.responseGoogle}
-              />,
+              <button className="login-button" onClick={this.normalLogin}>Login</button>
+              <FacebookLogin
+                  appId="374974243246808"
+                  autoLoad={true}
+                  fields="name,email,picture"
+                  callback={this.responseFacebook} />,
+                <GoogleLogin
+                    clientId="663898834693-2ubf8452m26stqnijav9dn2rgotbucqd.apps.googleusercontent.com"
+                    buttonText="Login"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                  />,
           </div>
         </div>
       </div>

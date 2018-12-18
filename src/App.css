@@ -6,9 +6,25 @@
   justify-content: center;
   background: #C0C0C0;
 }
-.logout{
-  font-style: italic;
+
+.login-success {
+  color: green;
 }
+
+.login-error {
+  color: red;
+}
+
+.logout{
+  text-decoration: underline;
+  font-style: normal;
+  margin: 0 1px;
+}
+
+.logout:hover{
+  cursor: pointer;
+  font-style: italic;
+} 
 
 .login-form {
   display: grid;
@@ -34,6 +50,7 @@
 .button-container{
   display: grid;
   grid-template-rows: 1fr 1fr;
+  grid-gap: 10px;
 }
 
 .facebook-login {
@@ -51,4 +68,9 @@
   width: 30px;
   height: 30px;
   text-align: center;
+}
+
+
+.kep-login-facebook{
+  width: 100%;
 }

@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.6.2",
+    "@types/axios": "^0.14.0",
     "@types/fb": "^0.0.23",
     "@types/muicss": "^0.9.1",
+    "@types/node-fetch": "^2.1.4",
     "@types/react-facebook-login": "^4.1.0",
+    "axios": "^0.18.0",
     "fb": "^2.0.0",
     "muicss": "^0.9.41",
     "react": "^16.6.3",
@@ -19,13 +22,17 @@
     "start": "export HTTPS=true && react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.12",
     "@types/react": "^16.7.13",
     "@types/react-dom": "^16.0.11",
+    "gh-pages": "^2.0.1",
     "typescript": "^3.2.2"
-  }
+  },
+  "homepage": "http://joaogolias.github.io/firebase-auth-playground"
 }
